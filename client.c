@@ -176,7 +176,7 @@ adm_query:
 			scanf("%[^\n]",c);
 			n=-1;
 		}
-		if(n<0||n>5)
+		if(n<0||n>6)
 		{
 			printf("请正确输入！！！\n");
 			goto adm_query;
