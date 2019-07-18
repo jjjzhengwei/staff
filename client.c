@@ -35,7 +35,7 @@ int main(int argc, const char *argv[])
 	int sockfd = socket(AF_INET,SOCK_STREAM,0);
 	if(sockfd > 0)
 	{
-		printf("sockfd create success!!\n");
+	//	printf("sockfd create success!!\n");
 	}
 	else
 	{
@@ -47,7 +47,7 @@ int main(int argc, const char *argv[])
 	addr.sin_addr.s_addr = inet_addr(argv[1]);
 	if(connect(sockfd,(const struct sockaddr*)&addr,sizeof(addr)) == 0)
 	{
-		printf("connect successn\n");
+	//	printf("connect successn\n");
 	}
 	else 
 	{
@@ -62,7 +62,7 @@ start:
 		if(scanf("%d",&n) <= 0)
 		{
 			scanf("%[^\n]",c);
-			n=111;
+			n=-1;
 		}
 		if(n<0||n>2)
 		{
@@ -100,7 +100,7 @@ next:
 		if(scanf("%d",&n) <= 0)
 		{
 			scanf("%[^\n]",c);
-			n=111;
+			n=-1;
 		}
 		if(n<0||n>2)
 		{
@@ -124,14 +124,14 @@ adm:
 	while(1)
 	{
 		printf("*******************************************************\t\n");
-		printf("* 请输入：0 登出 1查询 2删除 3修改 4历史记录 5添加员工*\t\n");
+		printf("* 请输入：0 登出 1查询 2删除 3修改 4添加员工 5历史记录*\t\n");
 		printf("* 6退出系统                                           *\t\n");
 		printf("*******************************************************\t\n");
 		printf("选择：");
 		if(scanf("%d",&n) <= 0)
 		{
 			scanf("%[^\n]",c);
-			n=111;
+			n=-1;
 		}
 		if(n<0||n>6)
 		{
@@ -153,10 +153,10 @@ adm:
 			 do_alter(sockfd,&msg);
 			break;
 		case 4:
-			do_history(sockfd,&msg);
+			do_register(sockfd,&msg);
 			break;
 		case 5:
-			do_register(sockfd,&msg);
+			do_history(sockfd,&msg);
 			break;
 		case 6:
 			close(sockfd);
@@ -168,14 +168,15 @@ adm_query:
 	{
 		printf("***************************************************************\t\n");
 		printf("* 请输入：0返回 1个人信息查询 2按id查询 3按name查询 4按job查询*\t\n");
+		printf("* 请输入: 5所有员工信息                                       *\t\n");
 		printf("****************************************************************\t\n");
 		printf("选择：");
 		if(scanf("%d",&n) <= 0)
 		{
-			perror("scanf");
-			exit(-1);
+			scanf("%[^\n]",c);
+			n=-1;
 		}
-		if(n<0||n>4)
+		if(n<0||n>5)
 		{
 			printf("请正确输入！！！\n");
 			goto adm_query;
@@ -198,6 +199,10 @@ adm_query:
 			break;
 		case 4:
 			msg.pattern = 2;
+			do_querys(sockfd,&msg);
+			break;
+		case 5:
+			msg.pattern = 3;
 			do_querys(sockfd,&msg);
 			break;
 		}

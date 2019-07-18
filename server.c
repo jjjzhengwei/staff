@@ -255,16 +255,27 @@ void do_querys(int acceptfd,MSG *msg,sqlite3 *db,History *history)
 		sprintf(sqlstr,"select * from staff where name='%s'",msg->name);
 	else if(msg->pattern == 2)
 		sprintf(sqlstr,"select * from staff where job='%s'",msg->job);
+	else if(msg->pattern == 3)
+		sprintf(sqlstr,"select * from staff ");
 	if(sqlite3_get_table(db,sqlstr,&result,&nrow,&ncolumn,&errmsg) != SQLITE_OK)
 	{
 		printf("error:%s\n",errmsg);
 	}
-	for(i = 1;i<nrow+1;i++)
+	if(nrow > 0)
 	{
-		sprintf(msg->data,"%s\t%s\t%s\t%s\t%s\t%s\t",result[i*ncolumn+0],
-				result[i*ncolumn+1],result[i*ncolumn+2],result[i*ncolumn+3],
-				result[i*ncolumn+4],result[i*ncolumn+5]);
-		if(i == nrow)
+		for(i = 1;i<nrow+1;i++)
+		{
+			sprintf(msg->data,"%s\t%s\t%s\t%s\t%s\t%s\t",result[i*ncolumn+0],
+					result[i*ncolumn+1],result[i*ncolumn+2],result[i*ncolumn+3],
+					result[i*ncolumn+4],result[i*ncolumn+5]);
+			if(i == nrow)
+			msg->flag = 1;
+			send(acceptfd,msg,sizeof(MSG),0);
+		}
+	}
+	else
+	{
+		sprintf(msg->data,"无满足条件对象");
 		msg->flag = 1;
 		send(acceptfd,msg,sizeof(MSG),0);
 	}
