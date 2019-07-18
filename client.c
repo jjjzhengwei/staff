@@ -168,7 +168,7 @@ adm_query:
 	{
 		printf("***************************************************************\t\n");
 		printf("* 请输入：0返回 1个人信息查询 2按id查询 3按name查询 4按job查询*\t\n");
-		printf("* 请输入: 5所有员工信息                                       *\t\n");
+		printf("* 请输入: 5所有员工信息   6关闭系统                                      *\t\n");
 		printf("****************************************************************\t\n");
 		printf("选择：");
 		if(scanf("%d",&n) <= 0)
@@ -205,6 +205,9 @@ adm_query:
 			msg.pattern = 3;
 			do_querys(sockfd,&msg);
 			break;
+		case 6:
+			close(sockfd);
+			exit(1);
 		}
 	}
 	close(sockfd);
